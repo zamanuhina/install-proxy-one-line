@@ -8,11 +8,11 @@ CHECK_OS="$(awk '/^ID=/' /etc/*os-release | awk -F'=' '{ print tolower($2) }')"
 
 if [ "${CHECK_OS}" = "debian" ] || [ "${CHECK_OS}" = "\"debian\"" ] || [ "${CHECK_OS}" = "ubuntu" ] || [ "${CHECK_OS}" = "\"ubuntu\"" ]; then
     DEBIAN_FRONTEND=noninteractive apt-get -y -qq update
-    DEBIAN_FRONTEND=noninteractive apt-get -y -qq install apache2-utils squid3 wget
+    DEBIAN_FRONTEND=noninteractive apt-get -y -qq install apache2-utils squid3 wget 1>/dev/null 2>/dev/null
 elif [ "${CHECK_OS}" = "fedora" ] || [ "${CHECK_OS}" = "\"fedora\"" ]; then
-    dnf -y install httpd-tools squid3 wget
+    dnf -y install httpd-tools squid3 wget 1>/dev/null 2>/dev/null
 elif [ "${CHECK_OS}" = "centos" ] || [ "${CHECK_OS}" = "\"centos\"" ]; then
-    yum install -y httpd-tools squid3 wget
+    yum install -y httpd-tools squid3 wget 1>/dev/null 2>/dev/null
 fi
 
 PROXY_USER="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)"
@@ -31,7 +31,11 @@ if [ ! -d "${SQUID_LIB}" ]; then
     SQUID_LIB="/usr/lib/squid3"
 fi
 
-echo "${PROXY_PASS}" | htpasswd -c -i "${SQUID_DIR}"/passwd "${PROXY_USER}"
+if [ ! -f "${SQUID_DIR}/passwd" ]; then
+    touch "${SQUID_DIR}/passwd"
+fi
+
+echo "${PROXY_PASS}" | htpasswd -i "${SQUID_DIR}/passwd" "${PROXY_USER}" 1>/dev/null 2>/dev/null
 
 cat <<EOT >> "${SQUID_DIR}"/squid.conf
     http_port ${PROXY_PORT}
