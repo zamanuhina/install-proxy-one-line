@@ -4,6 +4,10 @@ G='\033[0;32m'
 Y='\033[0;33m'
 NC='\033[0m'
 
+printf "\n"
+printf " ... Please wait for a few seconds ...\n"
+printf "\n"
+
 CHECK_OS="$(awk '/^ID=/' /etc/*os-release | awk -F'=' '{ print tolower($2) }')"
 
 if [ "${CHECK_OS}" = "debian" ] || [ "${CHECK_OS}" = "\"debian\"" ] || [ "${CHECK_OS}" = "ubuntu" ] || [ "${CHECK_OS}" = "\"ubuntu\"" ]; then
@@ -38,17 +42,17 @@ fi
 echo "${PROXY_PASS}" | htpasswd -i "${SQUID_DIR}/passwd" "${PROXY_USER}" 1>/dev/null 2>/dev/null
 
 cat <<EOT >> "${SQUID_DIR}"/squid.conf
-    http_port ${PROXY_PORT}
-    auth_param basic program ${SQUID_LIB}/basic_ncsa_auth ${SQUID_DIR}/passwd
-    auth_param basic children 5
-    auth_param basic realm Squid Basic Authentication
-    auth_param basic credentialsttl 2 hours
-    acl auth_users proxy_auth REQUIRED
-    request_header_access X-Forwarded-For deny all
-    request_header_access Via deny all
-    request_header_access Proxy deny all
-    request_header_access Cache-Control deny all
-    http_access allow auth_users
+http_port ${PROXY_PORT}
+auth_param basic program ${SQUID_LIB}/basic_ncsa_auth ${SQUID_DIR}/passwd
+auth_param basic children 5
+auth_param basic realm Squid Basic Authentication
+auth_param basic credentialsttl 2 hours
+acl auth_users proxy_auth REQUIRED
+request_header_access X-Forwarded-For deny all
+request_header_access Via deny all
+request_header_access Proxy deny all
+request_header_access Cache-Control deny all
+http_access allow auth_users
 EOT
 
 systemctl start squid3 1>/dev/null 2>/dev/null
