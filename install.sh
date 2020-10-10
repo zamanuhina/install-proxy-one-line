@@ -20,22 +20,22 @@ PROXY_PASS="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)"
 PROXY_IP="$(wget http://ipecho.net/plain -O - -q)"
 PROXY_PORT="5$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 1)$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 1)$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 1)$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 1)"
 
-SQUID_DIR="/etc/squid3"
-SQUID_LIB="/usr/lib/squid3"
+SQUID_DIR="/etc/squid"
+SQUID_LIB="/usr/lib/squid"
 
 if [ ! -d "${SQUID_DIR}" ]; then
-    SQUID_DIR="/etc/squid"
+    SQUID_DIR="/etc/squid3"
 fi
 
 if [ ! -d "${SQUID_LIB}" ]; then
-    SQUID_LIB="/usr/lib/squid"
+    SQUID_LIB="/usr/lib/squid3"
 fi
 
 echo "${PROXY_PASS}" | htpasswd -c -i "${SQUID_DIR}"/passwd "${PROXY_USER}"
 
 cat <<EOT >> "${SQUID_DIR}"/squid.conf
     http_port ${PROXY_PORT}
-    auth_param basic program ${SQUID_LIB}/basic_ncsa_auth "${SQUID_DIR}/passwd"
+    auth_param basic program ${SQUID_LIB}/basic_ncsa_auth ${SQUID_DIR}/passwd
     auth_param basic children 5
     auth_param basic realm Squid Basic Authentication
     auth_param basic credentialsttl 2 hours
