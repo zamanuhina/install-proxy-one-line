@@ -1,5 +1,7 @@
 # Install proxy server one line
 
+# `bash <(wget git.io/JTUZP -qO-)`
+
 ```bash
 ~# bash <(wget git.io/JTUZP -qO-)
 
