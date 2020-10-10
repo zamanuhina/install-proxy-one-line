@@ -41,7 +41,9 @@ fi
 
 echo "${PROXY_PASS}" | htpasswd -i "${SQUID_DIR}/passwd" "${PROXY_USER}" 1>/dev/null 2>/dev/null
 
-cat <<EOT >> "${SQUID_DIR}"/squid.conf
+touch "${SQUID_DIR}/squid.conf.new"
+
+cat <<EOT >> "${SQUID_DIR}/squid.conf.new"
 http_port ${PROXY_PORT}
 auth_param basic program ${SQUID_LIB}/basic_ncsa_auth ${SQUID_DIR}/passwd
 auth_param basic children 5
@@ -54,6 +56,10 @@ request_header_access Proxy deny all
 request_header_access Cache-Control deny all
 http_access allow auth_users
 EOT
+
+cat "${SQUID_DIR}/squid.conf" >> "${SQUID_DIR}/squid.conf.new"
+
+mv "${SQUID_DIR}/squid.conf.new" "${SQUID_DIR}/squid.conf"
 
 systemctl start squid3 1>/dev/null 2>/dev/null
 systemctl enable squid3 1>/dev/null 2>/dev/null
