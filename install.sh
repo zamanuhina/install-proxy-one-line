@@ -1,5 +1,9 @@
 #!/bin/bash
 
+G='\033[0;32m'
+Y='\033[0;33m'
+NC='\033[0m'
+
 CHECK_OS="$(awk '/^ID=/' /etc/*os-release | awk -F'=' '{ print tolower($2) }')"
 
 if [ "${CHECK_OS}" = "debian" ] || [ "${CHECK_OS}" = "\"debian\"" ] || [ "${CHECK_OS}" = "ubuntu" ] || [ "${CHECK_OS}" = "\"ubuntu\"" ]; then
@@ -36,4 +40,7 @@ systemctl start squid3
 systemctl enable squid3
 systemctl restart squid3
 
-echo "YOUR PROXY - ${PROXY_USER}:${PROXY_PASS}@${PROXY_IP}:${PROXY_PORT}"
+echo ""
+echo "${Y}----------------------------------------${NC}"
+echo "${G}YOUR PROXY - ${PROXY_USER}:${PROXY_PASS}@${PROXY_IP}:${PROXY_PORT}"
+echo "${Y}----------------------------------------${NC}"
