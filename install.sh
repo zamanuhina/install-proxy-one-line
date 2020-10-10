@@ -47,13 +47,13 @@ cat <<EOT >> "${SQUID_DIR}"/squid.conf
     http_access allow auth_users
 EOT
 
-systemctl start squid3 >> /dev/null
-systemctl enable squid3 >> /dev/null
-systemctl restart squid3 >> /dev/null
+systemctl start squid3 1>/dev/null 2>/dev/null
+systemctl enable squid3 1>/dev/null 2>/dev/null
+systemctl restart squid3 1>/dev/null 2>/dev/null
 
-systemctl start squid >> /dev/null
-systemctl enable squid >> /dev/null
-systemctl restart squid >> /dev/null
+systemctl start squid 1>/dev/null 2>/dev/null
+systemctl enable squid 1>/dev/null 2>/dev/null
+systemctl restart squid 1>/dev/null 2>/dev/null
 
 printf "\n"
 printf "${Y}----------------------------------------${NC}\n"
