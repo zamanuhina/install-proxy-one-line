@@ -35,7 +35,7 @@ echo "${PROXY_PASS}" | htpasswd -c -i "${SQUID_DIR}"/passwd "${PROXY_USER}"
 
 cat <<EOT >> "${SQUID_DIR}"/squid.conf
     http_port ${PROXY_PORT}
-    auth_param basic program ${SQUID_LIB}/basic_ncsa_auth "${SQUID_DIR}"/passwd
+    auth_param basic program ${SQUID_LIB}/basic_ncsa_auth "${SQUID_DIR}/passwd"
     auth_param basic children 5
     auth_param basic realm Squid Basic Authentication
     auth_param basic credentialsttl 2 hours
