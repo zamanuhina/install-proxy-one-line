@@ -19,8 +19,8 @@ elif [ "${CHECK_OS}" = "centos" ] || [ "${CHECK_OS}" = "\"centos\"" ]; then
     yum install -y httpd-tools squid3 wget 1>/dev/null 2>/dev/null
 fi
 
-PROXY_USER="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)"
-PROXY_PASS="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)"
+PROXY_USER="$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 8 | head -n 1)"
+PROXY_PASS="$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 8 | head -n 1)"
 PROXY_IP="$(wget http://ipecho.net/plain -O - -q)"
 PROXY_PORT="5$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 1)$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 1)$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 1)$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 1)"
 
