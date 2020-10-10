@@ -20,11 +20,22 @@ PROXY_PASS="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)"
 PROXY_IP="$(wget http://ipecho.net/plain -O - -q)"
 PROXY_PORT="5$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 1)$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 1)$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 1)$(cat /dev/urandom | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 1)"
 
-echo "${PROXY_PASS}" | htpasswd -c -i /etc/squid3/passwd "${PROXY_USER}"
+SQUID_DIR="/etc/squid3"
+SQUID_LIB="/usr/lib/squid3"
 
-cat <<EOT >> /etc/squid3/squid.conf
+if [ ! -d "${SQUID_DIR}" ]; then
+    SQUID_DIR="/etc/squid"
+fi
+
+if [ ! -d "${SQUID_LIB}" ]; then
+    SQUID_LIB="/usr/lib/squid"
+fi
+
+echo "${PROXY_PASS}" | htpasswd -c -i "${SQUID_DIR}"/passwd "${PROXY_USER}"
+
+cat <<EOT >> "${SQUID_DIR}"/squid.conf
     http_port ${PROXY_PORT}
-    auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid3/passwd
+    auth_param basic program ${SQUID_LIB}/basic_ncsa_auth "${SQUID_DIR}"/passwd
     auth_param basic children 5
     auth_param basic realm Squid Basic Authentication
     auth_param basic credentialsttl 2 hours
@@ -36,12 +47,16 @@ cat <<EOT >> /etc/squid3/squid.conf
     http_access allow auth_users
 EOT
 
-systemctl start squid3
-systemctl enable squid3
-systemctl restart squid3
+systemctl start squid3 >> /dev/null
+systemctl enable squid3 >> /dev/null
+systemctl restart squid3 >> /dev/null
 
-echo ""
-echo "${Y}----------------------------------------${NC}"
-echo "${G}YOUR PROXY - ${PROXY_USER}:${PROXY_PASS}@${PROXY_IP}:${PROXY_PORT}"
-echo "${Y}----------------------------------------${NC}"
-echo ""
+systemctl start squid >> /dev/null
+systemctl enable squid >> /dev/null
+systemctl restart squid >> /dev/null
+
+printf "\n"
+printf "${Y}----------------------------------------${NC}\n"
+printf "${G}YOUR PROXY - ${PROXY_USER}:${PROXY_PASS}@${PROXY_IP}:${PROXY_PORT}\n"
+printf "${Y}----------------------------------------${NC}\n"
+printf "\n"
