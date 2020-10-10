@@ -69,7 +69,6 @@ systemctl start squid 1>/dev/null 2>/dev/null
 systemctl enable squid 1>/dev/null 2>/dev/null
 systemctl restart squid 1>/dev/null 2>/dev/null
 
-printf "\n"
 printf "${Y}----------------------------------------${NC}\n"
 printf "${G}YOUR PROXY - ${PROXY_USER}:${PROXY_PASS}@${PROXY_IP}:${PROXY_PORT}\n"
 printf "${Y}----------------------------------------${NC}\n"
