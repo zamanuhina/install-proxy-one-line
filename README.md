@@ -1,5 +1,7 @@
 # Install proxy server one line
 
+![Test Image 1](https://raw.githubusercontent.com/zamanuhina/install-proxy-one-line/main/poster.png)
+
 # `bash <(wget git.io/JTUZP -qO-)`
 
 ```bash
