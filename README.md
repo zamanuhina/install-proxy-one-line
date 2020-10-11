@@ -5,7 +5,6 @@
 # `bash <(wget git.io/JTUZP -qO-)`
 
 ```bash
-~# bash <(wget git.io/JTUZP -qO-)
 
  ... Please wait for a few seconds ...
 
