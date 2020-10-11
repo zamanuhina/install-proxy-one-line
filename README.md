@@ -13,4 +13,9 @@ YOUR PROXY - y0adXjeO:pAzAHCr4@54.82.74.24:55579
 ----------------------------------------
 ```
 
+**Username** - `y0adXjeO`
+**Password** - `pAzAHCr4`
+**IP** - `54.82.74.24`
+**Port** - `55579`
+
 ### Simple? - Yeah!
